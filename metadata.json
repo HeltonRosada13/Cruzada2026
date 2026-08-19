@@ -1,0 +1,6 @@
+{
+  "name": "Igreja Catedral de Amor e Fé",
+  "description": "Aplicação web editorial e responsiva para a Igreja Catedral de Amor e Fé com gestão em tempo real de eventos, cultos, galerias e painel administrativo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
