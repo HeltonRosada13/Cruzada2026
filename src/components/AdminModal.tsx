@@ -30,6 +30,8 @@ import {
   ExternalLink,
   Film,
   FolderOpen,
+  Code,
+  Copy,
 } from 'lucide-react';
 import { compressImageFile, isYouTubeVideoUrl, getYouTubeThumbnail, isDirectVideoUrl, formatYouTubeEmbedUrl } from '../lib/utils';
 
@@ -488,6 +490,20 @@ export const AdminModal: React.FC<AdminModalProps> = ({
     downloadAnchor.click();
     downloadAnchor.remove();
     onNotifyToast('Backup exportado com sucesso!');
+  };
+
+  // Copy current data formatted for defaultData.ts
+  const handleCopyDefaultDataTS = async () => {
+    try {
+      const codeOutput = `import { ChurchData } from '../types';
+
+export const defaultChurchData: ChurchData = ${JSON.stringify(formData, null, 2)};
+`;
+      await navigator.clipboard.writeText(codeOutput);
+      onNotifyToast('Código do defaultData.ts copiado para a Área de Transferência!');
+    } catch {
+      alert('Não foi possível copiar automaticamente. Use a exportação JSON.');
+    }
   };
 
   // Import JSON backup
@@ -2033,7 +2049,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
               </div>
 
               {/* Backup & Restore Tools */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 <div className="p-6 bg-[#F9F9F7] border border-gray-200 rounded-sm space-y-3">
                   <h6 className="text-xs uppercase tracking-widest font-bold text-[#1A1A1A] flex items-center gap-2">
                     <Download className="w-4 h-4 text-[#C5A059]" />
@@ -2044,7 +2060,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                   </p>
                   <button
                     onClick={handleExportBackup}
-                    className="w-full py-2.5 bg-white hover:bg-gray-50 border border-gray-300 text-[#1A1A1A] text-xs uppercase tracking-widest font-bold rounded-sm flex items-center justify-center gap-2 shadow-2xs"
+                    className="w-full py-2.5 bg-white hover:bg-gray-50 border border-gray-300 text-[#1A1A1A] text-xs uppercase tracking-widest font-bold rounded-sm flex items-center justify-center gap-2 shadow-2xs cursor-pointer"
                   >
                     <FileJson className="w-4 h-4 text-[#C5A059]" />
                     Baixar Arquivo JSON
@@ -2057,13 +2073,30 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                     Importar Backup JSON
                   </h6>
                   <p className="text-xs text-gray-500 leading-relaxed font-sans">
-                    Restaure um backup anterior previamente exportado.
+                    Restaure um backup anterior previamente exportado para aplicar neste dispositivo.
                   </p>
                   <label className="w-full py-2.5 bg-white hover:bg-gray-50 border border-gray-300 text-[#1A1A1A] text-xs uppercase tracking-widest font-bold rounded-sm flex items-center justify-center gap-2 shadow-2xs cursor-pointer">
                     <Upload className="w-4 h-4 text-[#C5A059]" />
                     Selecionar Arquivo JSON
                     <input type="file" accept=".json" onChange={handleImportBackup} className="hidden" />
                   </label>
+                </div>
+
+                <div className="p-6 bg-[#FDFBF7] border border-[#C5A059]/40 rounded-sm space-y-3">
+                  <h6 className="text-xs uppercase tracking-widest font-bold text-[#1A1A1A] flex items-center gap-2">
+                    <Code className="w-4 h-4 text-[#C5A059]" />
+                    Deploy Vercel & Celulares
+                  </h6>
+                  <p className="text-xs text-gray-500 leading-relaxed font-sans">
+                    Copie a estrutura atual para fixar em <code className="text-[#C5A059] font-bold">defaultData.ts</code> em novos deploys.
+                  </p>
+                  <button
+                    onClick={handleCopyDefaultDataTS}
+                    className="w-full py-2.5 bg-[#C5A059] hover:bg-[#A8843F] text-white text-xs uppercase tracking-widest font-bold rounded-sm flex items-center justify-center gap-2 shadow-2xs cursor-pointer"
+                  >
+                    <Copy className="w-4 h-4" />
+                    Copiar defaultData.ts
+                  </button>
                 </div>
               </div>
 
